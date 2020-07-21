@@ -9,13 +9,13 @@
 class Database
 {
 
-    private $host = "";
-    private $username = "";
-    private $password = "";
-    private $database = "";
+    private static $host = "";
+    private static $username = "";
+    private static $password = "";
+    private static $database = "";
 
     function __construct(){
-        return $this;
+        return $this->GetDatabase();
     }
 
     public function GetDatabase(){
@@ -26,16 +26,6 @@ class Database
         }catch(Exception $e){
             return false;
         }
-    }
-
-    public function DoSQLRequest($request, $array){ // SQL Request + Array of index champs
-        $db = $this->GetDatabase();
-        if($db){
-            $s = $db->prepare($request);
-            $s-execute($array);
-            return $s;
-        }
-
     }
 
 }

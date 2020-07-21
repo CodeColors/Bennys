@@ -12,6 +12,7 @@ if(isset($_POST['log'])){
     if(isset($_POST['username']) AND !empty($_POST['username']) AND isset($_POST['password']) AND !empty($_POST['password'])){
         $db = (new Database())->GetDatabase();
 
+
         $username = $_POST['username'];
         $password = $_POST['password'];
 
