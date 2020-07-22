@@ -9,10 +9,10 @@
 class Database
 {
 
-    private static $host = "";
-    private static $username = "";
-    private static $password = "";
-    private static $database = "";
+    private $host = "localhost";
+    private $username = "root";
+    private $password = "";
+    private $database = "bennys";
 
     function __construct(){
         return $this->GetDatabase();
