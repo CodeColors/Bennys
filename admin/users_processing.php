@@ -8,11 +8,11 @@
 session_start();
 
 if(!(isset($_SESSION['user']['id'])) || $_SESSION['user']['rank'] < 1){ header('Location: login.php'); }
-if(!(isset($_GET['action'])) AND !(isset($_GET['id'])) AND !(isset($_GET['csrf']))){ header('Location: users.php'); }
+if(!(isset($_GET['action'])) || !(isset($_GET['id'])) || !(isset($_GET['csrf']))){ header('Location: users.php'); }
 
 require('../libs/CSRF.php');
 $csrf = (new CSRF())->checkCSRF($_SESSION, $_GET, []);
-if (!($csrf)) { header('Location: logout.php'); }
+if (!($csrf)) { header('Location: ../logout.php'); }
 
 require('../libs/Database.php');
 
@@ -20,17 +20,25 @@ $db = (new Database())->GetDatabase();
 
 if($_GET['action'] == "modify"){
     if(isset($_GET['action_data'])){
-        $data = json_decode($_GET['action_data']);
+        $data = json_decode($_GET['action_data'], true);
         $target = $_GET['id'];
+
+
         $column = array_keys($data);
 
         $sqlModifiedCol = array();
         foreach($column as $item){
-            array_push($sqlModifiedCol, $item . ' = :' . $item);
+            if(!($data[$item] == "")){
+                array_push($sqlModifiedCol, $item . ' = :' . $item);
+            }else{
+                unset($data[$item]);
+            }
         }
-        $sqlModifiedCol .= implode(',', $sqlModifiedCol);
 
-        $req = $db->prepare("UPDATE users SET $sqlModifiedCol WHERE id = $target LIMIT 1");
+        $sqlModifiedCol = implode(', ', $sqlModifiedCol);
+        $data['id'] = $target;
+
+        $req = $db->prepare("UPDATE users SET $sqlModifiedCol WHERE id = :id");
         $req->execute($data);
         $_ALERT['users'] = "Modification réussie: $sqlModifiedCol";
         header('Location: users.php');

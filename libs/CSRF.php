@@ -20,8 +20,8 @@ class CSRF
         }
     }
 
-    public function addHiddenCSRFButton(){ // Hidden button for HTML form and post management
-
+    public function addHiddenCSRFButton($csrf){ // Hidden button for HTML form and post management
+        return '<input type="hidden" value="'. $csrf . '" name="csrf" />';
     }
 
 }

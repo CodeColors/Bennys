@@ -20,18 +20,18 @@ if(isset($_POST['log'])){
             die('Cannot retrieve account: error establishing database connection');
         }
 
-
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        $search_user = $db->prepare('SELECT * FROM users WHERE username = :username LIMIT 1', array( 'username' => $username ));
+        $search_user = $db->prepare('SELECT * FROM users WHERE username = :username LIMIT 1');
+        $search_user->execute(array( 'username' => $username ));
 
         if($search_user->rowCount() == 0){
             $_ALERT['login'] = "Erreur de login: compte inexistant";
             unset($_POST);
             header('Location: login.php');
         }else{
-            $search_user->fetch();
+            $search_user = $search_user->fetch();
             if(password_verify($password, $search_user['password'])){
                 require('libs/CSRF.php');
                 $_SESSION['csrf'] = (new CSRF())->generateCSRF();
