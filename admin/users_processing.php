@@ -23,7 +23,6 @@ if($_GET['action'] == "modify"){
         $data = json_decode($_GET['action_data'], true);
         $target = $_GET['id'];
 
-
         $column = array_keys($data);
 
         $sqlModifiedCol = array();
@@ -53,5 +52,32 @@ if($_GET['action'] == "modify"){
     ));
     $_ALERT['users'] = "Suppression réussie de l'utilisateur : $target";
     header('Location: users.php');
+}elseif($_GET['action'] == "create"){
+    if(isset($_GET['action_data'])){
+        $data = json_decode($_GET['action_data'], true);
+        $target = $_GET['id'];
+        $column = array_keys($data);
+
+        $sqlModifiedCol = array();
+        $sqlModifiedVal = array();
+        foreach($column as $item){
+            if(!($data[$item] == "")){
+                array_push($sqlModifiedCol, $item);
+                array_push($sqlModifiedVal, ":" . $item);
+            }else{
+                unset($data[$item]);
+            }
+        }
+
+        $sqlModifiedCol = implode(', ', $sqlModifiedCol);
+        $sqlModifiedVal = implode(', ', $sqlModifiedVal);
+
+        $req = $db->prepare("INSERT INTO users ($sqlModifiedCol) VALUES ($sqlModifiedVal)");
+        $req->execute($data);
+        $_ALERT['users'] = "Ajout réussi: $sqlModifiedCol";
+        header('Location: users.php');
+    }else {
+        $_ALERT['users'] = "Erreur lors de la modification: data cannot be provide.";
+    }
 }
 

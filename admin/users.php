@@ -20,6 +20,14 @@ if(isset($_POST['mod'])){
     header('Location: users_processing.php?action=modify&id='. $_GET['id'] . '&csrf='. $_SESSION['csrf'] . '&action_data=' . json_encode($_POST));
 }
 
+if(isset($_POST['add'])){
+    unset($_POST['add']);
+
+    $_POST['password'] = password_hash($_POST['password'], PASSWORD_BCRYPT);
+
+    header('Location: users_processing.php?action=create&id=0&csrf='. $_SESSION['csrf'] . '&action_data=' . json_encode($_POST));
+}
+
 require('../libs/Database.php');
 $db = (new Database())->GetDatabase();
 
@@ -37,6 +45,9 @@ if(!(isset($_GET['action']))){
 
 
 <h2>Liste des utilisateurs</h2>
+    <hr>
+    <span><a href="users.php?action=create">Créer un nouveau compte</a></span>
+    <hr>
 
 <table>
     <thead>
@@ -60,8 +71,7 @@ if(!(isset($_GET['action']))){
 </table>
 
 <?php
-}else{
-    if($_GET['action'] == "modify"){
+}elseif($_GET['action'] == "modify"){
         if(isset($_GET['id'])){
 
             $user = $db->prepare("SELECT * FROM users WHERE id = :id LIMIT 1");
@@ -83,18 +93,23 @@ if(!(isset($_GET['action']))){
             <?php
             }else{
                 $_ALERT['users'] = "Erreur: target not found in database";
-                //header('Location: users.php');
-                die('ERR_TAR_N_FOUND: ' . var_dump($user->rowCount()));
+                header('Location: users.php');
             }
         }else{
             $_ALERT['users'] = "Erreur: target not specified";
-            //header('Location: users.php');
-            die('ERR_T_NSPEC');
+            header('Location: users.php');
         }
-
-
-    }
-
+}elseif($_GET['action'] == "create"){ ?>
+    <h2>Ajouter un utilisateur</h2>
+    <form method="post">
+        <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+        <input type="password" name="password" placeholder="Mot de passe" required>
+        <input type="text" name="rank" placeholder="Rang (max 1)" required>
+        <input type="submit" name="add" value="Ajouter">
+    </form>
+<?php
+}else{
+    header('Location: users.php');
 }
 ?>
 
