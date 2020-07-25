@@ -8,7 +8,7 @@
 session_start();
 require('../libs/Utils.php');
 
-if(!(isset($_SESSION['user']['id'])) || $_SESSION['user']['rank'] < 1){ header('Location: login.php'); }
+if(!(isset($_SESSION['user']['id'])) || $_SESSION['user']['rank'] < 1){ header('Location: ../login.php'); }
 
 
 
@@ -39,48 +39,89 @@ if(isset($_ALERT['users'])){
     echo $_ALERT['users'];
     unset($_ALERT['users']);
 }
-
-if(!(isset($_GET['action']))){
 ?>
 
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>Bennys</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+        <link rel="stylesheet" href="../assets/fonts/fontawesome5-overrides.min.css">
+        <link rel="stylesheet" href="../assets/css/styles.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    </head>
 
-<h2>Liste des utilisateurs</h2>
-    <hr>
-    <span><a href="users.php?action=create">Créer un nouveau compte</a></span>
-    <hr>
-
-<table>
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Nom</th>
-            <th>Rank</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($users as $user){ ?>
-        <tr>
-            <th><?= $user['id']; ?></th>
-            <th><?= $user['username']; ?></th>
-            <th><?= $user['rank']; ?></th>
-            <th><a href="users.php?action=modify&id=<?= $user['id']; ?>">Éditer</a> |-| <a href="users_processing.php?action=delete&id=<?= $user['id']; ?>&csrf=<?php $_SESSION['csrf']; ?>">Supprimer</a></th>
-            </tr>
-            <?php } ?>
-    </tbody>
-</table>
-
-<?php
-}elseif($_GET['action'] == "modify"){
-        if(isset($_GET['id'])){
+    <body>
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean-search">
+        <div class="container"><a class="navbar-brand" href="#" style="font-size: 25px;">Benny's - Administration</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div
+                    class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="./home.php">Accueil</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active" href="./users.php">Utilisateurs</a></li>
+                    <li class="nav-item" role="presentation"></li>
+                    <li class="nav-item" role="presentation"></li>
+                </ul>
+                <form class="form-inline mr-auto" target="_self">
+                    <div class="form-group"><label for="search-field"></label></div>
+                </form><a class="btn btn-light action-button" role="button" href="../home.php"><i class="fa fa-arrow-circle-left"></i>&nbsp;Retour au site</a></div>
+        </div>
+    </nav>
+    <?php if(!(isset($_GET['action']))){ ?>
+    <div class="row">
+        <div class="col">
+            <div class="container text-nowrap d-xl-flex justify-content-xl-center">
+                <div class="col d-xl-flex justify-content-xl-start align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;">
+                    <h3 style="text-align: center;">Liste des utilisateurs</h3>
+                </div>
+                <div class="col text-center d-xl-flex justify-content-xl-end align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;"><a href="users.php?action=create&id=0" class="btn btn-primary text-center" type="button" style="background-color: #56c6c6;border-radius: 100px;border-color: #56c6c6;"><i class="fa fa-pencil"></i>&nbsp;Ajouter un utilisateur</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="background-color: #eef4f7;">
+        <div class="clearfix"></div>
+        <div class="col" style="margin-top: 15px;background-color: #eef4f7;">
+            <div class="container">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="width: 2%;">#</th>
+                            <th style="width: 15%;text-align: center;">Nom</th>
+                            <th style="width: 2%;text-align: center;">Rang</th>
+                            <th style="width: 10%;text-align: center;">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($users as $user){ ?>
+                            <tr>
+                                <td><?= $user['id']; ?></td>
+                                <td style="text-align: center;"><?= $user['username']; ?></td>
+                                <td style="text-align: center;"><?= $user['rank']; ?></td>
+                                <td class="text-center d-xl-flex justify-content-xl-center align-items-xl-center"><a href="users.php?action=modify&id=<?= $user['id']; ?>"><i class="fa fa-pencil-square-o" style="font-size: 20px;"></i></a> |-| <a href="users_processing.php?action=delete&id=<?= $user['id']; ?>&csrf=<?php $_SESSION['csrf']; ?>"><i class="fa fa-trash" style="font-size: 20px;"></i></a></td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+        }elseif($_GET['action'] == "modify"){
+            if(isset($_GET['id'])){
 
             $user = $db->prepare("SELECT * FROM users WHERE id = :id LIMIT 1");
             $user->execute(array(
-                    "id" => $_GET['id']
+                "id" => $_GET['id']
             ));
             if($user->rowCount() > 0){
-                $user = $user->fetch();
-            ?>
+            $user = $user->fetch();
+    ?>
                 <h2>Modifier l'utilisateur: <?= $user['username']; ?></h2>
                 <form method="post">
                     <input type="text" name="username" placeholder="Nom d'utilisateur" value="<?= $user['username']; ?>">
@@ -88,30 +129,50 @@ if(!(isset($_GET['action']))){
                     <input type="text" name="rank" placeholder="Rang (max 1)">
                     <input type="submit" name="mod" value="Modifier">
                 </form>
-
-
-            <?php
-            }else{
-                $_ALERT['users'] = "Erreur: target not found in database";
-                header('Location: users.php');
-            }
+    <?php
+        }else{
+            $_ALERT['users'] = "Erreur: target not found in database";
+            header('Location: users.php');
+        }
         }else{
             $_ALERT['users'] = "Erreur: target not specified";
             header('Location: users.php');
         }
-}elseif($_GET['action'] == "create"){ ?>
-    <h2>Ajouter un utilisateur</h2>
-    <form method="post">
-        <input type="text" name="username" placeholder="Nom d'utilisateur" required>
-        <input type="password" name="password" placeholder="Mot de passe" required>
-        <input type="text" name="rank" placeholder="Rang (max 1)" required>
-        <input type="submit" name="add" value="Ajouter">
-    </form>
-<?php
-}else{
-    header('Location: users.php');
-}
-?>
+    }elseif($_GET['action'] == "create"){ ?>
+        <h2>Ajouter un utilisateur</h2>
+        <form method="post">
+            <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <input type="text" name="rank" placeholder="Rang (max 1)" required>
+            <input type="submit" name="add" value="Ajouter">
+        </form>
+
+        <?php
+    }else{
+        header('Location: users.php');
+    }
+    ?>
+    <div class="footer-basic">
+        <footer>
+            <div class="social" style="padding-bottom: 5px;"><a href="https://discord.gg/zufyAES"><i class="fab fa-discord"></i></a><a href="https://github.com/CodeColors"><i class="icon ion-social-github"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">Administration</a></li>
+                <li class="list-inline-item"><a href="#" style="color: #4b4c4d;">Retour au site</a></li>
+                <li class="list-inline-item"><a href="#">Déconnexion</a></li>
+            </ul>
+            <p class="copyright">piaf © 2020</p>
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
+
+
+
+
+
+
 
 
 
