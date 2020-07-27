@@ -12,6 +12,13 @@
   </a>
 </p>
 
+> A Roleplay Benny's Management Website
+>
+👤 **CodeColors**
+
+* Website: http://piafthedev.fr/ 
+* Github: [@CoderColors ](https://github.com/CoderColors)
+
 ## ❓ Installation
 
 First of all, you'll need to import the .SQL file that contains the database in your database management system.
@@ -23,12 +30,7 @@ Finally, you'll need to connect to the website with these credentials:
 | admin    | admin    |
 
 🚨 **WARNING: please delete or change the master account's password 'admin' due to security issues**
-> A Roleplay Benny's Management We
-> 
-👤 **CodeColors **
 
-* Website: http://piafthedev.fr/ 
-* Github: [@CoderColors ](https://github.com/CoderColors)
 
 ## 🤝 Contributing
 
