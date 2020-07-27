@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if(!(isset($_SESSION['user']['id']))){
+    header('Location: login.php');
+}
+?>
+
 <html>
 
 <head>
@@ -19,23 +27,25 @@
             <div
                 class="collapse navbar-collapse" id="navcol-1">
                 <ul class="nav navbar-nav">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="home.html">Accueil</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="home.php">Accueil</a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Gestion des plaques</a></li>
                     <li class="nav-item" role="presentation"></li>
                     <li class="nav-item" role="presentation"></li>
                 </ul>
                 <form class="form-inline mr-auto" target="_self">
                     <div class="form-group"><label for="search-field"></label></div>
-                </form><a class="btn btn-light action-button" role="button" href="#"><i class="fa fa-gear"></i>&nbsp;Administration</a></div>
+                </form><?php if($_SESSION['user']['rank'] > 0) { ?> <a class="btn btn-light action-button" role="button" href="admin/home.php"><i class="fa fa-gear"></i>&nbsp;Administration</a><?php } ?></div>
         </div>
     </nav>
+    <?php if(!(isset($_GET['action']))){ ?>
+
     <div class="row">
         <div class="col">
             <div class="container text-nowrap d-xl-flex justify-content-xl-center">
                 <div class="col d-xl-flex justify-content-xl-start align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;">
                     <h3 style="text-align: center;">Liste des véhicules</h3>
                 </div>
-                <div class="col text-center d-xl-flex justify-content-xl-end align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;"><button class="btn btn-primary text-center" type="button" style="background-color: #56c6c6;border-radius: 100px;border-color: #56c6c6;"><i class="fa fa-pencil"></i>&nbsp;Ajouter une plaque</button></div>
+                <div class="col text-center d-xl-flex justify-content-xl-end align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;"><a href="plaques.php?action=create" class="btn btn-primary text-center" type="button" style="background-color: #56c6c6;border-radius: 100px;border-color: #56c6c6;"><i class="fa fa-pencil"></i>&nbsp;Ajouter une plaque</a></div>
             </div>
         </div>
     </div>
@@ -102,6 +112,11 @@
             </div>
         </div>
     </div>
+
+    <?php }else{ ?>
+
+
+    <?php } ?>
     <div class="footer-basic">
         <footer>
             <div class="social"><a href="https://discord.gg/zufyAES"><i class="fab fa-discord"></i></a><a href="https://github.com/CodeColors"><i class="icon ion-social-github"></i></a></div>
