@@ -10,6 +10,12 @@ session_start();
 if(!(isset($_SESSION['user']['id']))){
     header('Location: login.php');
 }
+require('libs/Database.php');
+
+$db = (new Database())->GetDatabase();
+$statement = $db->prepare('SELECT * FROM plate LIMIT 5');
+$statement->execute();
+$statement = $statement->fetchAll();
 
 ?>
 
@@ -62,46 +68,34 @@ if(!(isset($_SESSION['user']['id']))){
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td style="text-align: center;">UPG-L86</td>
-                        <td>Blablabla</td>
-                        <td style="text-align: center;"><span><span class="badge badge-primary" style="margin-right: 5px;background-color: #00b760;"><i class="fa fa-check"></i></span></span>Valide</td>
-                        <td style="text-align: center;"><span class="badge badge-primary" style="margin-right: 5px;background-color: #00b760;"><i class="fa fa-trophy"></i>&nbsp;100</span></td>
-                        <td class="text-center"><a href="#"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td style="text-align: center;">UP689ZX</td>
-                        <td>Blablabla</td>
-                        <td style="text-align: center;"><span style="margin-right: 5px;"><span class="badge badge-primary" style="background-color: #00b760;"><i class="fa fa-check"></i></span></span>Valide</td>
-                        <td style="text-align: center;"><span class="badge badge-primary" style="margin-right: 5px;background-color: #00b760;"><i class="fa fa-trophy"></i>&nbsp;90</span></td>
-                        <td class="text-center"><a href="#"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td style="text-align: center;">PO236ZA<br></td>
-                        <td>Blobloblob</td>
-                        <td style="text-align: center;"><span><span class="badge badge-primary" style="margin-right: 5px;background-color: #d81e05;"><i class="fa fa-times"></i></span></span>HS</td>
-                        <td style="text-align: center;"><span class="badge badge-primary" style="margin-right: 5px;background-color: #d81e05;"><i class="fa fa-trophy"></i>&nbsp;10</span></td>
-                        <td class="text-center"><a href="#"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a></td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td style="text-align: center;">JIL-853</td>
-                        <td>blibliblbi</td>
-                        <td style="text-align: center;"><span><span class="badge badge-primary" style="margin-right: 5px;background-color: #fcb514;"><i class="fa fa-wrench"></i></span></span>Vidange</td>
-                        <td style="text-align: center;"><span class="badge badge-primary" style="margin-right: 5px;background-color: #fcb514;"><i class="fa fa-trophy"></i>&nbsp;40</span></td>
-                        <td class="text-center"><a href="#"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a></td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td style="text-align: center;">CB186ZP</td>
-                        <td>nlunlulnlunl</td>
-                        <td style="text-align: center;"><span><span class="badge badge-primary" style="margin-right: 5px;background-color: #fcb514;"><i class="fa fa-wrench"></i></span></span>Révision</td>
-                        <td style="text-align: center;"><span class="badge badge-primary" style="margin-right: 5px;background-color: #fcb514;"><i class="fa fa-trophy"></i>&nbsp;35</span></td>
-                        <td class="text-center"><a href="#"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a></td>
-                    </tr>
+                    <?php foreach($statement as $plate){ ?>
+                        <tr>
+                            <td><?= $plate['id']; ?></td>
+                            <td style="text-align: center;"><?= $plate['name']; ?></td>
+                            <td><?= $plate['last_title']; ?></td>
+                            <?php if($plate['state'] == 0){ ?>
+                                <td style="text-align: center;"><span><span class="badge badge-success" style="margin-right: 5px;"><i class="fa fa-check"></i></span></span>Valide</td>
+                            <?php } elseif($plate['state'] == 1) { ?>
+                                <td style="text-align: center;"><span><span class="badge badge-warning" style="margin-right: 5px;"><i class="fa fa-check"></i></span></span>Vidange</td>
+                            <?php } elseif($plate['state'] == 2) { ?>
+                                <td style="text-align: center;"><span><span class="badge badge-warning" style="margin-right: 5px;"><i class="fa fa-check"></i></span></span>Révision</td>
+                            <?php } elseif($plate['state'] == 3) { ?>
+                                <td style="text-align: center;"><span><span class="badge badge-danger" style="margin-right: 5px;"><i class="fa fa-check"></i></span></span>HS</td>
+                            <?php }
+                            $score = 100 - ($plate['n_entry'] * 4);
+                            if($score < 0){ $score = 0; }
+                            if($score >= 66){
+                                ?>
+                                <td style="text-align: center;"><span class="badge badge-success" style="margin-right: 5px;"><i class="fa fa-trophy"></i><?= $score; ?></span></td>
+                            <?php } elseif($score < 66 AND $score >= 33) { ?>
+                                <td style="text-align: center;"><span class="badge badge-warning" style="margin-right: 5px;"><i class="fa fa-trophy"></i><?= $score; ?></span></td>
+                            <?php } elseif($score < 33) { ?>
+                                <td style="text-align: center;"><span class="badge badge-danger" style="margin-right: 5px;"><i class="fa fa-trophy"></i><?= $score; ?></span></td>
+                            <?php } ?>
+
+                            <td class="text-center"><a href="#<?= $plate['id']; ?>"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a></td>
+                        </tr>
+                    <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -115,12 +109,12 @@ if(!(isset($_SESSION['user']['id']))){
             <div class="col-sm-6 col-md-5 col-lg-4 item">
                 <div class="box"><i class="fa fa-car icon" style="color: #66d7d7;"></i>
                     <h3 class="name">Enregistrer un véhicule</h3>
-                    <p class="description">Afin d'enregistrer un nouveau véhicule, cliquez sur le bouton ci dessous.</p><a class="learn-more" href="#">Enregistrer une plaque »</a></div>
+                    <p class="description">Afin d'enregistrer un nouveau véhicule, cliquez sur le bouton ci dessous.</p><a class="learn-more" href="plaques.php?action=create">Enregistrer une plaque »</a></div>
             </div>
             <div class="col-sm-6 col-md-5 col-lg-4 item">
                 <div class="box"><i class="fa fa-list-alt icon" style="color: #56c6c6;"></i>
                     <h3 class="name">Liste des véhicules</h3>
-                    <p class="description">Afin d'accéder à la liste des véhicules, cliquez sur le bouton ci dessous.</p><a class="learn-more" href="#">Voir les véhicules »</a></div>
+                    <p class="description">Afin d'accéder à la liste des véhicules, cliquez sur le bouton ci dessous.</p><a class="learn-more" href="plaques.php">Voir les véhicules »</a></div>
             </div>
         </div>
     </div>
