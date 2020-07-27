@@ -21,8 +21,6 @@ Finally, you'll need to connect to the website with these credentials:
 | Username | Password |
 | -------- | -------- |
 | admin    | admin    |
-|          |          |
-|          |          |
 
 🚨 **WARNING: please delete or change the master account's password 'admin' due to security issues**
 > A Roleplay Benny's Management We
