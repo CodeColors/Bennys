@@ -53,6 +53,7 @@ if(isset($_ALERT['users'])){
         <link rel="stylesheet" href="../assets/fonts/fontawesome5-overrides.min.css">
         <link rel="stylesheet" href="../assets/css/styles.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.21/datatables.min.css"/>
     </head>
 
     <body>
@@ -87,7 +88,7 @@ if(isset($_ALERT['users'])){
         <div class="col" style="margin-top: 15px;background-color: #eef4f7;">
             <div class="container">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table" id="users">
                         <thead>
                         <tr>
                             <th style="width: 2%;">#</th>
@@ -165,6 +166,12 @@ if(isset($_ALERT['users'])){
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.21/datatables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#users').DataTable();
+        } );
+    </script>
     </body>
 </html>
 
