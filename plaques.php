@@ -6,6 +6,23 @@ if(!(isset($_SESSION['user']['id']))){
 }
 
 require('libs/Database.php');
+require('libs/CSRF.php');
+$csrf = new CSRF();
+$db = (new Database())->GetDatabase();
+
+if(isset($_POST['add'])){
+    if($csrf->checkCSRF($_SESSION, [], $_POST)){
+        $req = $db->prepare('INSERT INTO plate (name, owner, state) VALUES (:name, :owner, :state)');
+        $req->execute(array(
+            "name" => $_POST['plate'],
+            "owner" => $_POST['owner'],
+            "state" => $_POST['state']
+        ));
+        header('Location: plaques.php');
+    }else{
+        header('Location: logout.php');
+    }
+}
 ?>
 
 <html>
@@ -41,7 +58,7 @@ require('libs/Database.php');
     </nav>
     <?php
         if(!(isset($_GET['action']))){
-            $db = (new Database())->GetDatabase();
+
 
             $statement = $db->prepare('SELECT * FROM plate');
             $statement->execute();
@@ -130,11 +147,13 @@ require('libs/Database.php');
                 <div class="col d-xl-flex justify-content-xl-center align-items-xl-center" style="margin-top: 15px;background-color: #eef4f7;">
                     <div class="container d-xl-flex justify-content-xl-center align-items-xl-center" style="margin-bottom: 15px;">
                         <div class="col-6 d-xl-flex justify-content-xl-center align-items-xl-center">
-                            <form class="text-center">
+                            <form class="text-center" method="post">
                                 <div class="form-group d-xl-flex justify-content-xl-center align-items-xl-center"><label style="margin-right: 10px;">Plaque:</label><input class="form-control" type="text" name="plate" required=""></div>
                                 <div class="form-group d-xl-flex justify-content-xl-center align-items-xl-center"><label style="margin-right: 10px;">Propriétaire:</label><input class="form-control" type="text" name="owner" required=""></div>
                                 <div class="form-group d-xl-flex justify-content-xl-center align-items-xl-center"><label style="margin-right: 10px;">Statut:</label><select class="form-control" name="state" required=""><option value="0" selected="">Valide</option><option value="1">Vidange</option><option value="2">Révision</option><option value="3">HS</option></select></div>
-                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1" required=""><label class="form-check-label" for="formCheck-1">Je certifie avoir vérifié les informations lors de la saisie</label></div><input class="btn btn-info" type="submit" name="add">Envoyer</input></form>
+                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1" required=""><label class="form-check-label" for="formCheck-1">Je certifie avoir vérifié les informations lors de la saisie</label></div>
+                                <?php echo $csrf->addHiddenCSRFButton($_SESSION['csrf']); ?>
+                                <input class="btn btn-info" type="submit" name="add"></input></form>
                         </div>
                     </div>
                 </div>
