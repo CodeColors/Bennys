@@ -7,7 +7,7 @@
   <a href="https://www.gnua.org/licenses/gpl-3.0.en.html " target="_blank">
     <img alt="License: GNU General Public License  v3 " src="https://img.shields.io/badge/License-GNU General Public License  v3 -yellow.svg" />
   </a>
-  <a href="https://github.com/CoderColors/graphs/commit-activity" target="_blank">
+  <a href="https://github.com/CodeColors/graphs/commit-activity" target="_blank">
     <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
   </a>
 </p>
@@ -17,7 +17,7 @@
 👤 **CodeColors**
 
 * Website: http://piafthedev.fr/ 
-* Github: [@CoderColors ](https://github.com/CoderColors)
+* Github: [@CodeColors](https://github.com/CodeColors
 
 ## ❓ Installation
 
@@ -42,5 +42,5 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2020 [CodeColors](https://github.com/CoderColors).<br />
+Copyright © 2020 [CodeColors](https://github.com/CodeColors).<br />
 This project is [GNU General Public License v3](https://www.gnua.org/licenses/gpl-3.0.en.html) licensed.
