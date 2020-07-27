@@ -17,7 +17,7 @@
 👤 **CodeColors**
 
 * Website: http://piafthedev.fr/ 
-* Github: [@CodeColors](https://github.com/CodeColors
+* Github: [@CodeColors](https://github.com/CodeColors)
 
 ## ❓ Installation
 
