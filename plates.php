@@ -18,7 +18,7 @@ if(isset($_POST['add'])){
             "owner" => $_POST['owner'],
             "state" => $_POST['state']
         ));
-        header('Location: plaques.php');
+        header('Location: plates.php');
     }else{
         header('Location: logout.php');
     }
@@ -77,7 +77,7 @@ if(isset($_POST['add'])){
                 <div class="col d-xl-flex justify-content-xl-start align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;">
                     <h3 style="text-align: center;">Liste des véhicules</h3>
                 </div>
-                <div class="col text-center d-xl-flex justify-content-xl-end align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;"><a href="plaques.php?action=create" class="btn btn-primary text-center" type="button" style="background-color: #56c6c6;border-radius: 100px;border-color: #56c6c6;"><i class="fa fa-pencil"></i>&nbsp;Ajouter une plaque</a></div>
+                <div class="col text-center d-xl-flex justify-content-xl-end align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;"><a href="plates.php?action=create" class="btn btn-primary text-center" type="button" style="background-color: #56c6c6;border-radius: 100px;border-color: #56c6c6;"><i class="fa fa-pencil"></i>&nbsp;Ajouter une plaque</a></div>
             </div>
         </div>
     </div>
@@ -123,7 +123,7 @@ if(isset($_POST['add'])){
                                         <td style="text-align: center;"><span class="badge badge-danger" style="margin-right: 5px;"><i class="fa fa-trophy"></i><?= $score; ?></span></td>
                                 <?php } ?>
 
-                                <td class="text-center"><a href="#<?= $plate['id']; ?>"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a></td>
+                                <td class="text-center"><a href="plates.php?action=view&id=<?= $plate['id']; ?>"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a></td>
                             </tr>
                             <?php } ?>
                         </tbody>
@@ -141,7 +141,7 @@ if(isset($_POST['add'])){
                         <div class="col d-xl-flex justify-content-xl-start align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;">
                             <h3 style="text-align: center;">Ajouter un véhicule</h3>
                         </div>
-                        <div class="col text-center d-xl-flex justify-content-xl-end align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;"><a href="plaques.php" class="btn btn-primary text-center" type="button" style="background-color: #56c6c6;border-radius: 100px;border-color: #56c6c6;"><i class="fa fa-arrow-circle-left"></i>&nbsp;Retour à la liste</a></div>
+                        <div class="col text-center d-xl-flex justify-content-xl-end align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;"><a href="plates.php" class="btn btn-primary text-center" type="button" style="background-color: #56c6c6;border-radius: 100px;border-color: #56c6c6;"><i class="fa fa-arrow-circle-left"></i>&nbsp;Retour à la liste</a></div>
                     </div>
                 </div>
             </div>
@@ -157,6 +157,83 @@ if(isset($_POST['add'])){
                                 <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1" required=""><label class="form-check-label" for="formCheck-1">Je certifie avoir vérifié les informations lors de la saisie</label></div>
                                 <?php echo $csrf->addHiddenCSRFButton($_SESSION['csrf']); ?>
                                 <input class="btn btn-info" type="submit" name="add"></input></form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php }elseif(isset($_GET['id']) AND $_GET['action'] == "view"){
+            $statement = $db->prepare('SELECT * FROM plate WHERE id = :id LIMIT 1');
+            $statement->execute(array('id' => $_GET['id']));
+            $plate = $statement->fetch();
+        ?>
+            <div class="row">
+                <div class="col">
+                    <div class="container text-nowrap d-xl-flex justify-content-xl-center">
+                        <div class="col d-xl-flex justify-content-xl-start align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;">
+                            <h3 style="text-align: center;">Plaque: <?= $plate['name']; ?></h3>
+                        </div>
+                        <div class="col text-center d-xl-flex justify-content-xl-end align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;"><button class="btn btn-primary text-center" type="button" style="background-color: #56c6c6;border-radius: 100px;border-color: #56c6c6;"><i class="fa fa-arrow-circle-left"></i>&nbsp;Retour à la liste</button></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="background-color: #eef4f7;">
+                <div class="col d-xl-flex justify-content-xl-center align-items-xl-center" style="margin-top: 15px;">
+                    <div class="container d-xl-flex justify-content-xl-center align-items-xl-center" style="margin-bottom: 15px;">
+                        <div class="col-xl-2 d-xl-flex justify-content-xl-center align-items-xl-center" style="padding-top: 15px;">
+                            <ul class="list-unstyled" style="padding: 15px;background-color: #ffffff;border-radius: 15px;">
+                                <li><strong>Plate: </strong><?= $plate['name']; ?></li>
+                                <li><strong>Owner: </strong><?= $plate['owner']; ?></li>
+                                <?php if($plate['state'] == 0){ ?>
+                                    <li><strong>State: </strong><span class="badge badge-success" style="margin-right: 5px;padding-right: 3px;"><i class="fa fa-check"></i>&nbsp;</span>Valide</li>
+                                <?php } elseif($plate['state'] == 1) { ?>
+                                    <li><strong>State: </strong><span class="badge badge-warning" style="margin-right: 5px;padding-right: 3px;"><i class="fa fa-check"></i>&nbsp;</span>Vidange</li>
+                                <?php } elseif($plate['state'] == 2) { ?>
+                                    <li><strong>State: </strong><span class="badge badge-warning" style="margin-right: 5px;padding-right: 3px;"><i class="fa fa-check"></i>&nbsp;</span>Révision</li>
+                                <?php } elseif($plate['state'] == 3) { ?>
+                                    <li><strong>State: </strong><span class="badge badge-danger" style="margin-right: 5px;padding-right: 3px;"><i class="fa fa-check"></i>&nbsp;</span>HS</li>
+                                <?php }
+                                $score = 100 - ($plate['n_entry'] * 4);
+                                if($score < 0){ $score = 0; }
+                                if($score >= 66){
+                                    ?>
+                                    <li><strong>Score:</strong>&nbsp;<span class="badge badge-success" style="margin-right: 5px;"><i class="fa fa-trophy"></i><?= $score; ?></span></li>
+                                <?php } elseif($score < 66 AND $score >= 33) { ?>
+                                    <li><strong>Score:</strong>&nbsp;<span class="badge badge-warning" style="margin-right: 5px;"><i class="fa fa-trophy"></i><?= $score; ?></span></li>
+                                <?php } elseif($score < 33) { ?>
+                                    <li><strong>Score:</strong>&nbsp;<span class="badge badge-danger" style="margin-right: 5px;"><i class="fa fa-trophy"></i><?= $score; ?></span></li>
+                                <?php } ?>
+
+
+                                <li><strong>Entries: </strong><?= $plate['n_entry']; ?></li>
+                            </ul>
+                        </div>
+                        <div class="col" style="background-color: #ffffff;border-radius: 15px;padding: 15px;">
+                            <article>
+                                <h4 class="d-xl-flex align-items-xl-center" style="border-radius: 15px;background-color: rgba(255,255,255,0);">Heading&nbsp;<span class="badge badge-success"><i class="fa fa-check"></i>&nbsp;Excellent</span></h4>
+                                <p>Paragraph</p>
+                            </article>
+                            <hr>
+                            <article>
+                                <h4 class="d-xl-flex align-items-xl-center" style="border-radius: 15px;background-color: rgba(255,255,255,0);">Heading&nbsp;<span class="badge badge-success"><i class="fa fa-check"></i>&nbsp;Excellent</span></h4>
+                                <p>Paragraph</p>
+                            </article>
+                            <hr>
+                            <article>
+                                <h4 class="d-xl-flex align-items-xl-center" style="border-radius: 15px;background-color: rgba(255,255,255,0);">Heading&nbsp;<span class="badge badge-success"><i class="fa fa-check"></i>&nbsp;Excellent</span></h4>
+                                <p>Paragraph</p>
+                            </article>
+                            <hr>
+                            <nav class="d-xl-flex justify-content-xl-center align-items-xl-center">
+                                <ul class="pagination">
+                                    <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                    <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>

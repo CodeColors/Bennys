@@ -41,7 +41,7 @@ $statement = $statement->fetchAll();
                 class="collapse navbar-collapse" id="navcol-1">
             <ul class="nav navbar-nav">
                 <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Accueil</a></li>
-                <li class="nav-item" role="presentation"><a class="nav-link" href="plaques.php">Gestion des plaques</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="plates.php">Gestion des plaques</a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link" href="logout.php">Déconnexion</a></li>
                 <li class="nav-item" role="presentation"></li>
                 <li class="nav-item" role="presentation"></li>
@@ -93,7 +93,7 @@ $statement = $statement->fetchAll();
                                 <td style="text-align: center;"><span class="badge badge-danger" style="margin-right: 5px;"><i class="fa fa-trophy"></i><?= $score; ?></span></td>
                             <?php } ?>
 
-                            <td class="text-center"><a href="#<?= $plate['id']; ?>"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a></td>
+                            <td class="text-center"><a href="plates.php?action=view&id=<?= $plate['id']; ?>"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a></td>
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -109,12 +109,12 @@ $statement = $statement->fetchAll();
             <div class="col-sm-6 col-md-5 col-lg-4 item">
                 <div class="box"><i class="fa fa-car icon" style="color: #66d7d7;"></i>
                     <h3 class="name">Enregistrer un véhicule</h3>
-                    <p class="description">Afin d'enregistrer un nouveau véhicule, cliquez sur le bouton ci dessous.</p><a class="learn-more" href="plaques.php?action=create">Enregistrer une plaque »</a></div>
+                    <p class="description">Afin d'enregistrer un nouveau véhicule, cliquez sur le bouton ci dessous.</p><a class="learn-more" href="plates.php?action=create">Enregistrer une plaque »</a></div>
             </div>
             <div class="col-sm-6 col-md-5 col-lg-4 item">
                 <div class="box"><i class="fa fa-list-alt icon" style="color: #56c6c6;"></i>
                     <h3 class="name">Liste des véhicules</h3>
-                    <p class="description">Afin d'accéder à la liste des véhicules, cliquez sur le bouton ci dessous.</p><a class="learn-more" href="plaques.php">Voir les véhicules »</a></div>
+                    <p class="description">Afin d'accéder à la liste des véhicules, cliquez sur le bouton ci dessous.</p><a class="learn-more" href="plates.php">Voir les véhicules »</a></div>
             </div>
         </div>
     </div>
@@ -124,7 +124,7 @@ $statement = $statement->fetchAll();
         <div class="social"><a href="https://discord.gg/zufyAES"><i class="fab fa-discord"></i></a><a href="https://github.com/CodeColors"><i class="icon ion-social-github"></i></a></div>
         <ul class="list-inline">
             <li class="list-inline-item"><a href="#">Accueil</a></li>
-            <li class="list-inline-item"><a href="plaques.php">Plaques</a></li>
+            <li class="list-inline-item"><a href="plates.php">Plaques</a></li>
             <li class="list-inline-item"><a href="#">Administration</a></li>
             <li class="list-inline-item"><a href="#">Déconnexion</a></li>
             <li class="list-inline-item"></li>
