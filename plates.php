@@ -123,7 +123,7 @@ if(isset($_POST['add'])){
                                         <td style="text-align: center;"><span class="badge badge-danger" style="margin-right: 5px;"><i class="fa fa-trophy"></i><?= $score; ?></span></td>
                                 <?php } ?>
 
-                                <td class="text-center"><a href="plates.php?action=view&id=<?= $plate['id']; ?>"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a></td>
+                                <td class="text-center"><a href="plates.php?action=view&id=<?= $plate['id']; ?>"><i class="fa fa-chevron-right" style="font-size: 20px;"></i></a> <?php if($_SESSION['user']['rank'] > 0){ ?><a href="plates.php?action=delete&id=<?= $plate['id']; ?>&csrf=<?php $_SESSION['csrf']; ?>"><i class="fa fa-trash" style="font-size: 20px;"></i></a><?php } ?></td>
                             </tr>
                             <?php } ?>
                         </tbody>
@@ -172,7 +172,7 @@ if(isset($_POST['add'])){
                         <div class="col d-xl-flex justify-content-xl-start align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;">
                             <h3 style="text-align: center;">Plaque: <?= $plate['name']; ?></h3>
                         </div>
-                        <div class="col text-center d-xl-flex justify-content-xl-end align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;"><button class="btn btn-primary text-center" type="button" style="background-color: #56c6c6;border-radius: 100px;border-color: #56c6c6;"><i class="fa fa-arrow-circle-left"></i>&nbsp;Retour à la liste</button></div>
+                        <div class="col text-center d-xl-flex justify-content-xl-end align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;"><a href="plates.php" class="btn btn-primary text-center" type="button" style="background-color: #56c6c6;border-radius: 100px;border-color: #56c6c6;"><i class="fa fa-arrow-circle-left"></i>&nbsp;Retour à la liste</a></div>
                     </div>
                 </div>
             </div>
@@ -238,7 +238,20 @@ if(isset($_POST['add'])){
                     </div>
                 </div>
             </div>
-        <?php } }  ?>
+        <?php }elseif(isset($_GET['id']) AND $_GET['action'] == 'delete'){
+            if($_SESSION['user']['rank'] > 0){
+                $check = $csrf->checkCSRF($_SESSION, $_GET, []);
+                if(!($check)) { header('Location: logout.php'); }
+
+                $req_1 = $db->prepare('DELETE FROM plate WHERE id = :id');
+                $req_2 = $db->prepare('DELETE FROM plate_notes WHERE plate_id = :id');
+
+                $req_1->execute(array('id' => $_GET['id']));
+                $req_2->execute(array('id' => $_GET['id']));
+
+                header('Location: plates.php');
+            }
+        } }  ?>
     <div class="footer-basic">
         <footer>
             <div class="social"><a href="https://discord.gg/zufyAES"><i class="fab fa-discord"></i></a><a href="https://github.com/CodeColors"><i class="icon ion-social-github"></i></a></div>
