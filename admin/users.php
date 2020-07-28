@@ -102,8 +102,12 @@ if(isset($_ALERT['users'])){
                             <tr>
                                 <td><?= $user['id']; ?></td>
                                 <td style="text-align: center;"><?= $user['username']; ?></td>
-                                <td style="text-align: center;"><?= $user['rank']; ?></td>
-                                <td class="text-center d-xl-flex justify-content-xl-center align-items-xl-center"><a href="users.php?action=modify&id=<?= $user['id']; ?>"><i class="fa fa-pencil-square-o" style="font-size: 20px;"></i></a> |-| <a href="users_processing.php?action=delete&id=<?= $user['id']; ?>&csrf=<?php $_SESSION['csrf']; ?>"><i class="fa fa-trash" style="font-size: 20px;"></i></a></td>
+                                <?php if($user['rank'] == 0){ ?>
+                                    <td style="text-align: center;">Utilisateur</td>
+                                <?php }else{ ?>
+                                    <td style="text-align: center;">Administrateur</td>
+                                <?php } ?>
+                                <td class="text-center d-xl-flex justify-content-xl-center align-items-xl-center"><a href="users.php?action=modify&id=<?= $user['id']; ?>" style="margin-right: 10px;"><i class="fa fa-pencil-square-o" style="font-size: 20px;"></i></a>   <a href="users_processing.php?action=delete&id=<?= $user['id']; ?>&csrf=<?php $_SESSION['csrf']; ?>"><i class="fa fa-trash" style="font-size: 20px;"></i></a></td>
                             </tr>
                         <?php } ?>
                         </tbody>
@@ -140,13 +144,31 @@ if(isset($_ALERT['users'])){
             header('Location: users.php');
         }
     }elseif($_GET['action'] == "create"){ ?>
-        <h2>Ajouter un utilisateur</h2>
-        <form method="post">
-            <input type="text" name="username" placeholder="Nom d'utilisateur" required>
-            <input type="password" name="password" placeholder="Mot de passe" required>
-            <input type="text" name="rank" placeholder="Rang (max 1)" required>
-            <input type="submit" name="add" value="Ajouter">
-        </form>
+        <div class="row">
+            <div class="col">
+                <div class="container text-nowrap d-xl-flex justify-content-xl-center">
+                    <div class="col d-xl-flex justify-content-xl-start align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;">
+                        <h3 style="text-align: center;">Ajouter un utilisateur</h3>
+                    </div>
+                    <div class="col text-center d-xl-flex justify-content-xl-end align-items-xl-center" style="min-width: 50%;max-width: 50%;padding: 1%;"><a href="users.php" class="btn btn-primary text-center" type="button" style="background-color: #56c6c6;border-radius: 100px;border-color: #56c6c6;"><i class="fa fa-arrow-circle-left"></i>&nbsp;Retour à la liste</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="row d-xl-flex justify-content-xl-center align-items-xl-center" style="background-color: #eef4f7;">
+            <div class="clearfix"></div>
+            <div class="col d-xl-flex justify-content-xl-center align-items-xl-center" style="margin-top: 15px;background-color: #eef4f7;">
+                <div class="container d-xl-flex justify-content-xl-center align-items-xl-center" style="margin-bottom: 15px;">
+                    <div class="col-6 d-xl-flex justify-content-xl-center align-items-xl-center">
+                        <form class="text-center" method="post">
+                            <div class="form-group d-xl-flex justify-content-xl-center align-items-xl-center"><label style="margin-right: 10px;">Nom:</label><input class="form-control" type="text" name="username" required=""></div>
+                            <div class="form-group d-xl-flex justify-content-xl-center align-items-xl-center"><label style="margin-right: 10px;">Mot de passe:</label><input class="form-control" type="password" name="password" required=""></div>
+                            <div class="form-group d-xl-flex justify-content-xl-center align-items-xl-center"><label style="margin-right: 10px;">Rang:</label><select class="form-control" name="rank" required=""><option value="0" selected="">Utilisateur</option><option value="1">Administrateur</option></select></div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1" required=""><label class="form-check-label" for="formCheck-1">Je certifie avoir vérifié les informations lors de la saisie</label></div>
+                            <input class="btn btn-info" type="submit" name="add"></input></form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <?php
     }else{
